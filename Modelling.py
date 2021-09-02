@@ -201,7 +201,13 @@ show_figure(time, state_values)
 show_figure(time,noise_state_values)
 show_figure(time,Eff)
 
-DAT = np.column_stack((noisy_donor,noisy_acceptor,time))
+DAT = np.column_stack((noisy_donor,noisy_acceptor))
 dye_df = pd.DataFrame(DAT)
-dye_df.columns = ["Donor", "Acceptor", "Time"]
+dye_df.columns = ["Donor", "Acceptor"]
 print(dye_df)
+dye_df_string = dye_df.to_string()
+
+name = "Intensity.txt"
+with open(os.path.join('/Users/baileyskewes/Documents/Python_Projects/Modelling_FRET/Trace_output',name),'w') as file1:
+    file1.write(dye_df_string)
+
