@@ -21,7 +21,6 @@ def start_state(state_1,state_2):
         state = state_2
         return state
 
-
 ### mean time relates to mean dwell time for each state --> inverse of rate constant
 mean_time_1 = 1/(P[0][0])
 mean_time_2 = 1/(P[1][1])
@@ -56,10 +55,6 @@ def FRET_state(state_1,state_2,T):
                 state = state_2
             else:
                 state = state_1
-
-
-
-FRET_state(0.2,0.8,100)
 
 ### function for interpolating function, needs to 'integrate' state_df values --> interpolate this data
 ### --> np.diff to differentiate back. 
@@ -97,7 +92,6 @@ def interp_states2(time_points,noise):
         return multiple_int
 
 
-
 ### functions that prints figure, takes x and y variables as inputs
 def show_figure(time_x,treatment_y):
     plot1 = plt.figure(figsize=(5,2))
@@ -119,70 +113,6 @@ def show_figure_AD(time_x,treatment_y_1,treatment_y_2):
     plt.ylim(0,100,20)
     plt.xlim(0,100,20)
 
-
-
-
-state_values = interp_states(1000, noise = False)
-noise_state_values = interp_states(1000,noise = True)
-time = np.linspace(0,100,(len(state_values)))
-
-
-show_figure(time,state_values)
-show_figure(time,noise_state_values)
-
-acc_signal = []
-don_signal = []
-
-
-
-### generates dye traces with noise as function of mean_photon_count * 0.2
-
-# def dye_trace(intensity,dye):
-#     ### donor trace + noise
-#     if dye == "donor":
-#         for state in state_values:
-#             donor = (1-state) * intensity
-#             don_signal.append(donor)
-#         mean_photon_count_don = np.mean(don_signal)
-#         noise_don = np.random.normal(0,(mean_photon_count_don*0.2),len(don_signal))
-#         noisy_don = don_signal + noise_don
-#         return noisy_don
-#     elif dye == "acceptor":
-#     ### acceptor trace + noise
-#         for state in state_values:
-#             acceptor = state * intensity
-#             acc_signal.append(acceptor)
-#         mean_photon_count_acc = np.mean(acc_signal)
-#         noise_acc = np.random.normal(0,(mean_photon_count_acc*0.2),len(acc_signal))
-#         noisy_acc = acc_signal + noise_acc
-#         return noisy_acc
-
-
-
-### Generates dye traces with noise added as function of sqrt(intensity)
-
-# def dye_trace(intensity,dye):
-#     ### donor trace + noise
-#     if dye == "donor":
-#         for state in state_values:
-#             donor = (1-state) * intensity
-#             don_signal.append(donor)
-#         mean_photon_count_don = np.mean(don_signal)
-#         noise_don = np.random.normal(0,(np.sqrt(intensity)),len(don_signal))
-#         noisy_don = don_signal + noise_don
-#         return noisy_don
-#     elif dye == "acceptor":
-#     ### acceptor trace + noise
-#         for state in state_values:
-#             acceptor = state * intensity
-#             acc_signal.append(acceptor)
-#         mean_photon_count_acc = np.mean(acc_signal)
-#         noise_acc = np.random.normal(0,(np.sqrt(intensity)),len(acc_signal))
-#         noisy_acc = acc_signal + noise_acc
-#         return noisy_acc
-current_don_noise = []
-current_acc_noise = []
-
 def dye_trace(intensity,dye):
     ### donor trace + noise
     if dye == "donor":
@@ -199,46 +129,7 @@ def dye_trace(intensity,dye):
             current_a_noise = np.random.normal(0,(np.sqrt(acceptor)),1)
             current_acc_noise.append(current_a_noise)
 
-
-
-# dye_trace(100,dye = "donor")
-# dye_trace(100, dye = "acceptor")
-
-# current_don_noise = np.concatenate(current_don_noise)
-# current_acc_noise = np.concatenate(current_acc_noise)
-
-# noise_don = don_signal + current_don_noise
-# noise_acc = acc_signal + current_acc_noise
-
-
-# show_figure_AD(time,don_signal,acc_signal)
-# show_figure_AD(time,noise_don,noise_acc)
-
-# def FRET_E(donor, acceptor):
-#     Eff = (acceptor)/(acceptor + donor)
-#     return Eff
-
-# Eff = FRET_E(noisy_donor, noisy_acceptor)
-
-
-
-# show_figure(time, state_values)
-# show_figure(time,noise_state_values)
-# show_figure(time,Eff)
-
-# DAT = np.column_stack((noisy_donor,noisy_acceptor))
-
-# dye_df = pd.DataFrame(DAT)
-# # dye_df.columns = ["Donor", "Acceptor"]
-# print(dye_df)
-# dye_df_string = dye_df.to_string(index = False,header=False)
-
-
-# name = "Intensity.txt"
-# with open(os.path.join('/Users/baileyskewes/Documents/Python_Projects/Modelling_FRET/Trace_output',name),'w') as file1:
-#     file1.write(dye_df_string)
-
-
+time = np.linspace(0,100,(len(state_values)-1))
 
 N = 5
 mol = range(N)
@@ -257,11 +148,12 @@ for data in mol:
     current_don_noise = np.concatenate(current_don_noise)
     current_acc_noise = np.concatenate(current_acc_noise)
     noisy_donor = don_signal + current_don_noise
+    noisy_donor = noisy_donor[1:]
     noisy_acceptor = acc_signal + current_acc_noise
+    noisy_acceptor = noisy_acceptor[1:]
+    show_figure_AD(time,noisy_donor,noisy_acceptor)
     DAT = np.column_stack((noisy_donor,noisy_acceptor))
     dye_df = pd.DataFrame(DAT)
     dye_df_string = dye_df.to_string(index = False,header = False)
     with open(os.path.join("/Users/baileyskewes/Documents/Python_Projects/Modelling_FRET/Trace_output",name),'w') as file1:
         file1.write(dye_df_string)
-
-
