@@ -155,5 +155,9 @@ for data in mol:
     DAT = np.column_stack((noisy_donor,noisy_acceptor))
     dye_df = pd.DataFrame(DAT)
     dye_df_string = dye_df.to_string(index = False,header = False)
-    with open(os.path.join("C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output",name),'w') as file1:
+    with open(os.path.join("C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/DAT/Test_1",name),'w') as file1:
         file1.write(dye_df_string)
+    true_state_df = pd.DataFrame(state_values)
+    true_state_df_string = true_state_df.to_string(index = False, header = False)
+    with open(os.path.join("C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/True_state/Test_1",name),'w') as file2:
+        file2.write(true_state_df_string)
