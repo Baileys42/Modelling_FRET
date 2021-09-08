@@ -23,7 +23,22 @@ def get_trace_file(input_folder, output):
             shutil.copyfile(f"{folder}{trace}",f"{output}{new_folder}/{trace}")
 get_trace_file(data_path, output)
 
+
+def load_trace(file):
+    trace_df = pd.DataFrame(np.loadtext(file))
+    trace_df.columns("time", "donor", "acceptor", "FRET", "Idealised")
+    return trace_df
+
+
+
+compiled_df = []
 new_folder = ["vbFRET_file_output"]
 for folder in new_folder:
     tracelist = [trace for trace in os.listdir(folder)]
-    for trace in tracelist 
+    for trace in tracelist:
+        import_data = load_trace(trace)
+        compiled_df.append(import_data)
+compiled_df = pd.concat(compiled_df)
+print(compiled_df)
+
+
