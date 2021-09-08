@@ -4,6 +4,7 @@ import seaborn as sns
 import pandas as pd
 import os
 import shutil
+import glob as glob
 
 
 
@@ -31,14 +32,18 @@ def load_trace(file):
 
 
 
+def file_read(input_folder):
+    filename = glob.glob(input_folder + "/*.dat")
+    dfs = []
+    for file in filename:
+        dfs.append(pd.read_table(filename, sep = ''))
+    df = pd.concat(dfs)
+    df = pd.DataFrame(df)
+
 compiled_df = []
 new_folder = ["vbFRET_file_output"]
 for folder in new_folder:
-    tracelist = [trace for trace in os.listdir(folder)]
-    for trace in tracelist:
-        import_data = load_trace(trace)
-        compiled_df.append(import_data)
-compiled_df = pd.concat(compiled_df)
-print(compiled_df)
+    data = file_reader(new_folder)
+    compiled_df.append(data)
 
 
