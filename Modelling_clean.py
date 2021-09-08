@@ -151,7 +151,7 @@ for data in mol:
     noisy_donor = noisy_donor[1:]
     noisy_acceptor = acc_signal + current_acc_noise
     noisy_acceptor = noisy_acceptor[1:]
-    show_figure_AD(time,noisy_donor,noisy_acceptor)
+    #show_figure_AD(time,noisy_donor,noisy_acceptor)
     DAT = np.column_stack((noisy_donor,noisy_acceptor))
     dye_df = pd.DataFrame(DAT)
     dye_df_string = dye_df.to_string(index = False,header = False)

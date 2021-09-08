@@ -128,7 +128,7 @@ time = np.linspace(0,100,(len(state_values)))
 
 
 show_figure(time,state_values)
-show_figure(time,noise_state_values)
+# show_figure(time,noise_state_values)
 
 acc_signal = []
 don_signal = []
@@ -201,30 +201,30 @@ def dye_trace(intensity,dye):
 
 
 
-# dye_trace(100,dye = "donor")
-# dye_trace(100, dye = "acceptor")
+dye_trace(100,dye = "donor")
+dye_trace(100, dye = "acceptor")
 
-# current_don_noise = np.concatenate(current_don_noise)
-# current_acc_noise = np.concatenate(current_acc_noise)
+current_don_noise = np.concatenate(current_don_noise)
+current_acc_noise = np.concatenate(current_acc_noise)
 
-# noise_don = don_signal + current_don_noise
-# noise_acc = acc_signal + current_acc_noise
+noise_don = don_signal + current_don_noise
+noise_acc = acc_signal + current_acc_noise
 
 
 # show_figure_AD(time,don_signal,acc_signal)
-# show_figure_AD(time,noise_don,noise_acc)
+show_figure_AD(time,noise_don,noise_acc)
 
-# def FRET_E(donor, acceptor):
-#     Eff = (acceptor)/(acceptor + donor)
-#     return Eff
+def FRET_E(donor, acceptor):
+    Eff = (acceptor)/(acceptor + donor)
+    return Eff
 
-# Eff = FRET_E(noisy_donor, noisy_acceptor)
+Eff = FRET_E(noise_don, noise_acc)
 
 
 
 # show_figure(time, state_values)
 # show_figure(time,noise_state_values)
-# show_figure(time,Eff)
+show_figure(time,Eff)
 
 # DAT = np.column_stack((noisy_donor,noisy_acceptor))
 
@@ -240,28 +240,28 @@ def dye_trace(intensity,dye):
 
 
 
-N = 5
-mol = range(N)
-for data in mol:
-    name = "molecule_No_" + str(data) + ".txt"
-    dwell_times_df = []
-    states_df = []
-    FRET_state(0.2,0.8,100)
-    state_values = interp_states(1000, noise = False)
-    acc_signal = []
-    don_signal = []
-    current_don_noise = []
-    current_acc_noise = []
-    dye_trace(100,dye = "donor")
-    dye_trace(100,dye = "acceptor")
-    current_don_noise = np.concatenate(current_don_noise)
-    current_acc_noise = np.concatenate(current_acc_noise)
-    noisy_donor = don_signal + current_don_noise
-    noisy_acceptor = acc_signal + current_acc_noise
-    DAT = np.column_stack((noisy_donor,noisy_acceptor))
-    dye_df = pd.DataFrame(DAT)
-    dye_df_string = dye_df.to_string(index = False,header = False)
-    with open(os.path.join("/Users/baileyskewes/Documents/Python_Projects/Modelling_FRET/Trace_output",name),'w') as file1:
-        file1.write(dye_df_string)
+# N = 5
+# mol = range(N)
+# for data in mol:
+#     name = "molecule_No_" + str(data) + ".txt"
+#     dwell_times_df = []
+#     states_df = []
+#     FRET_state(0.2,0.8,100)
+#     state_values = interp_states(1000, noise = False)
+#     acc_signal = []
+#     don_signal = []
+#     current_don_noise = []
+#     current_acc_noise = []
+#     dye_trace(100,dye = "donor")
+#     dye_trace(100,dye = "acceptor")
+#     current_don_noise = np.concatenate(current_don_noise)
+#     current_acc_noise = np.concatenate(current_acc_noise)
+#     noisy_donor = don_signal + current_don_noise
+#     noisy_acceptor = acc_signal + current_acc_noise
+#     DAT = np.column_stack((noisy_donor,noisy_acceptor))
+#     dye_df = pd.DataFrame(DAT)
+#     dye_df_string = dye_df.to_string(index = False,header = False)
+#     with open(os.path.join("/Users/baileyskewes/Documents/Python_Projects/Modelling_FRET/Trace_output",name),'w') as file1:
+#         file1.write(dye_df_string)
 
 
