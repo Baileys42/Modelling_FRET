@@ -129,12 +129,11 @@ def dye_trace(intensity,dye):
             current_a_noise = np.random.normal(0,(np.sqrt(acceptor)),1)
             current_acc_noise.append(current_a_noise)
 
-time = np.linspace(0,100,(len(state_values)-1))
 
 N = 5
 mol = range(N)
 for data in mol:
-    name = "molecule_No_" + str(data) + ".txt"
+    name = "molecule_No_" + str(data + 1) + ".txt"
     dwell_times_df = []
     states_df = []
     FRET_state(0.2,0.8,100)
@@ -151,9 +150,10 @@ for data in mol:
     noisy_donor = noisy_donor[1:]
     noisy_acceptor = acc_signal + current_acc_noise
     noisy_acceptor = noisy_acceptor[1:]
+    time = np.linspace(0,100,(len(state_values)-1))
     #show_figure_AD(time,noisy_donor,noisy_acceptor)
     DAT = np.column_stack((noisy_donor,noisy_acceptor))
     dye_df = pd.DataFrame(DAT)
     dye_df_string = dye_df.to_string(index = False,header = False)
-    with open(os.path.join("/Users/baileyskewes/Documents/Python_Projects/Modelling_FRET/Trace_output",name),'w') as file1:
+    with open(os.path.join("C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output",name),'w') as file1:
         file1.write(dye_df_string)
