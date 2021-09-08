@@ -9,7 +9,7 @@ import glob as glob
 
 
 
-data_path = ["C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/vbFRET_output/Test_output/"]
+data_path = ["C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/vbFRET_output/Test_1/"]
 
 output = "C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRET/vbFRET_file_output/"
 
@@ -43,7 +43,7 @@ def file_read(input_folder):
     return df
 
 compiled_df = []
-new_folder = "C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRET/vbFRET_file_output/Test_output/"
+new_folder = "C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRET/vbFRET_file_output/Test_1/"
 bug = new_folder + "test.dat"
 print(bug)
 
@@ -53,11 +53,10 @@ for file in os.listdir(new_folder):
     name = new_folder + file
     df_name = "Trace_No_" + str(file[:1])
     print(df_name)
-    data = pd.read_csv(name, sep = '\s+')
+    data = pd.read_csv(name, sep = '\s+', engine = 'python')
     data.columns = ["time", "donor", "acceptor", "FRET", "Idealised"]
-    #print(data)
-    #data.columns = ["time", "donor", "acceptor", "FRET", "Idealised"]
     d[df_name] = data
+
 
 
 idealised_FRET = []
@@ -65,8 +64,48 @@ idealised_FRET = pd.DataFrame(idealised_FRET)
 
 for df in d:
     new_df = pd.DataFrame(d[df])
+    #print(new_df)
     ideal = new_df["Idealised"]
     idealised_FRET[df] = ideal
-print(idealised_FRET)
+#print(idealised_FRET)
 
 
+
+### state value
+state_input = 'C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/True_state/Test_1/'
+state_d = {}
+state_df_values = []
+state_df_values = pd.DataFrame(state_df_values)
+
+
+for file in os.listdir(state_input):
+    print('bug')
+    state_name = state_input + file
+    state_df_name = "Trace_No_" + str(file[-5])
+    print(state_df_name)
+    state_data = pd.read_csv(state_name)
+    state_d[state_df_name] = state_data
+
+
+
+#print(state_d)
+
+for df in state_d:
+    state_df = pd.DataFrame(state_d[df])
+    state_df_values[df] = state_df
+
+state_df_values = state_df_values[1:]
+state_df_values = state_df_values.reset_index()
+
+print('state_df')
+#print(state_df_values)
+
+
+difference = idealised_FRET.sub(state_df_values, axis=0)
+#print(idealised_FRET)
+#print(state_df_values)
+print(difference)
+
+trace_1_sum = difference["Trace_No_1"].sum()
+trace_1_RMSD = np.sqrt(trace_1_sum/999)
+print(trace_1_RMSD)
