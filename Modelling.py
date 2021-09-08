@@ -128,7 +128,7 @@ time = np.linspace(0,100,(len(state_values)))
 
 
 show_figure(time,state_values)
-# show_figure(time,noise_state_values)
+show_figure(time,noise_state_values)
 
 acc_signal = []
 don_signal = []
