@@ -6,4 +6,11 @@ import os
 import shutil
 
 
-def file_load():
+
+
+data_path = 
+
+
+def file_load(file):
+    trace_df = pd.DataFrame(np.loadtext(file))
+
