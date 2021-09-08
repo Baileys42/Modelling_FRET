@@ -161,33 +161,80 @@ don_signal = []
 
 ### Generates dye traces with noise added as function of sqrt(intensity)
 
+# def dye_trace(intensity,dye):
+#     ### donor trace + noise
+#     if dye == "donor":
+#         for state in state_values:
+#             donor = (1-state) * intensity
+#             don_signal.append(donor)
+#         mean_photon_count_don = np.mean(don_signal)
+#         noise_don = np.random.normal(0,(np.sqrt(intensity)),len(don_signal))
+#         noisy_don = don_signal + noise_don
+#         return noisy_don
+#     elif dye == "acceptor":
+#     ### acceptor trace + noise
+#         for state in state_values:
+#             acceptor = state * intensity
+#             acc_signal.append(acceptor)
+#         mean_photon_count_acc = np.mean(acc_signal)
+#         noise_acc = np.random.normal(0,(np.sqrt(intensity)),len(acc_signal))
+#         noisy_acc = acc_signal + noise_acc
+#         return noisy_acc
+current_don_noise = []
+current_acc_noise = []
+
 def dye_trace(intensity,dye):
     ### donor trace + noise
     if dye == "donor":
         for state in state_values:
             donor = (1-state) * intensity
             don_signal.append(donor)
-        mean_photon_count_don = np.mean(don_signal)
-        noise_don = np.random.normal(0,(np.sqrt(intensity)),len(don_signal))
-        noisy_don = don_signal + noise_don
-        return noisy_don
+            current_d_noise = np.random.normal(0,(np.sqrt(donor)),1)
+            current_don_noise.append(current_d_noise)
+        # mean_photon_count_don = np.mean(don_signal)
+        # noise_don = np.random.normal(0,(np.sqrt(intensity)),len(don_signal))
+        # noisy_don = don_signal + noise_don
+        # return noisy_don
     elif dye == "acceptor":
     ### acceptor trace + noise
         for state in state_values:
             acceptor = state * intensity
             acc_signal.append(acceptor)
-        mean_photon_count_acc = np.mean(acc_signal)
-        noise_acc = np.random.normal(0,(np.sqrt(intensity)),len(acc_signal))
-        noisy_acc = acc_signal + noise_acc
-        return noisy_acc
+            current_a_noise = np.random.normal(0,(np.sqrt(acceptor)),1)
+            current_acc_noise.append(current_a_noise)
+        # mean_photon_count_acc = np.mean(acc_signal)
+        # noise_acc = np.random.normal(0,(np.sqrt(intensity)),len(acc_signal))
+        # noisy_acc = acc_signal + noise_acc
+        # return noisy_acc
     
 
 
-noisy_donor = dye_trace(100,dye = "donor")
-noisy_acceptor = dye_trace(100,dye = "acceptor")
+
+# noisy_donor = dye_trace(100,dye = "donor")
+# print("noise donor" + str(len(noisy_donor)))
+# noisy_acceptor = dye_trace(100,dye = "acceptor")
+
+dye_trace(100,dye = "donor")
+dye_trace(100, dye = "acceptor")
+
+current_don_noise = np.concatenate(current_don_noise)
+current_acc_noise = np.concatenate(current_acc_noise)
+
+print("don_signal: " + str(len(don_signal)))
+print("don_noise: " + str(len(current_don_noise)))
+noise_don = don_signal + current_don_noise
+noise_acc = acc_signal + current_acc_noise
+print("don signal: " + str(don_signal[0:4]))
+print("current don " + str(current_don_noise[0:4]))
+print(noise_don[0:4])
+
+print(len(noise_don))
+
+print(len(current_don_noise))
+print(len(current_acc_noise))
 
 show_figure_AD(time,don_signal,acc_signal)
-show_figure_AD(time,noisy_donor,noisy_acceptor)
+show_figure_AD(time,noise_don,noise_acc)
 
 def FRET_E(donor, acceptor):
     Eff = (acceptor)/(acceptor + donor)
@@ -202,12 +249,35 @@ show_figure(time,noise_state_values)
 show_figure(time,Eff)
 
 DAT = np.column_stack((noisy_donor,noisy_acceptor))
-dye_df = pd.DataFrame(DAT)
-dye_df.columns = ["Donor", "Acceptor"]
-print(dye_df)
-dye_df_string = dye_df.to_string()
 
-name = "Intensity.txt"
-with open(os.path.join('/Users/baileyskewes/Documents/Python_Projects/Modelling_FRET/Trace_output',name),'w') as file1:
-    file1.write(dye_df_string)
+dye_df = pd.DataFrame(DAT)
+# dye_df.columns = ["Donor", "Acceptor"]
+print(dye_df)
+dye_df_string = dye_df.to_string(index = False,header=False)
+
+
+# name = "Intensity.txt"
+# with open(os.path.join('/Users/baileyskewes/Documents/Python_Projects/Modelling_FRET/Trace_output',name),'w') as file1:
+#     file1.write(dye_df_string)
+
+
+
+# N = 5
+# mol = range(N)
+# for data in mol:
+#     name = "molecule_No_" + str(data) + ".txt"
+#     dwell_times_df = []
+#     states_df = []
+#     FRET_state(0.2,0.8,100)
+#     state_values = interp_states(1000, noise = False)
+#     acc_signal = []
+#     don_signal = []
+#     noisy_donor = dye_trace(100,dye = "donor")
+#     noisy_acceptor = dye_trace(100,dye = "acceptor")
+#     DAT = np.column_stack((noisy_donor,noisy_acceptor))
+#     dye_df = pd.DataFrame(DAT)
+#     dye_df_string = dye_df.to_string(index = False,header = False)
+#     with open(os.path.join("/Users/baileyskewes/Documents/Python_Projects/Modelling_FRET/Trace_output",name),'w') as file1:
+#         file1.write(dye_df_string)
+
 
