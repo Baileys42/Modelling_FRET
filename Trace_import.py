@@ -8,9 +8,9 @@ import glob as glob
 
 
 
-
+### where vbFRET output files are
 data_path = ["C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/vbFRET_output/Test_1/"]
-
+### folder to move .dat files to
 output = "C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRET/vbFRET_file_output/"
 
 ### finds text files in input folder and moves to output folder
@@ -42,11 +42,12 @@ def file_read(input_folder):
     df = pd.DataFrame(df)
     return df
 
+
+### new location for .dat files from vbFRET
 compiled_df = []
 new_folder = "C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRET/vbFRET_file_output/Test_1/"
-bug = new_folder + "test.dat"
-print(bug)
 
+### imports text files and converts to pd.DataFrame --> then into dictionary of dfs
 d = {}
 
 for file in os.listdir(new_folder):
@@ -58,7 +59,7 @@ for file in os.listdir(new_folder):
     d[df_name] = data
 
 
-
+### generates data frame of idealised trace columns from each trace
 idealised_FRET = []
 idealised_FRET = pd.DataFrame(idealised_FRET)
 
@@ -71,15 +72,17 @@ for df in d:
 
 
 
-### state value
+### state value - where state value files are located
 state_input = 'C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/True_state/Test_1/'
+
+### generates dictionary of pd.dfs that contain true fret state values
 state_d = {}
 state_df_values = []
 state_df_values = pd.DataFrame(state_df_values)
 
 
 for file in os.listdir(state_input):
-    print('bug')
+
     state_name = state_input + file
     state_df_name = "Trace_No_" + str(file[-5])
     print(state_df_name)
@@ -94,18 +97,30 @@ for df in state_d:
     state_df = pd.DataFrame(state_d[df])
     state_df_values[df] = state_df
 
-state_df_values = state_df_values[1:]
-state_df_values = state_df_values.reset_index()
 
+### reformatting state values 
+state_df_values = state_df_values[1:]
+state_df_values.reset_index(drop = True, inplace=True)
+#print(state_df_values)
 print('state_df')
 #print(state_df_values)
 
-
+### finds difference between predicted and observed values
 difference = idealised_FRET.sub(state_df_values, axis=0)
 #print(idealised_FRET)
 #print(state_df_values)
 print(difference)
 
-trace_1_sum = difference["Trace_No_1"].sum()
-trace_1_RMSD = np.sqrt(trace_1_sum/999)
-print(trace_1_RMSD)
+### generates an RMSD value for each column
+RMSD_values = []
+
+for column in difference.columns:
+    column_sum = difference[column].sum()
+    column_squared = column_sum ** 2
+    column_RMSD = np.sqrt(column_squared/999)
+    RMSD_values.append(column_RMSD)
+
+print(RMSD_values)
+#trace_1_sum = difference["Trace_No_1"].sum()
+#trace_1_RMSD = np.sqrt(trace_1_sum/999)
+#print(trace_1_RMSD)
