@@ -130,10 +130,13 @@ def dye_trace(intensity,dye):
             current_acc_noise.append(current_a_noise)
 
 
-N = 5
+N = 10
 mol = range(N)
 for data in mol:
-    name = "molecule_No_" + str(data + 1) + ".txt"
+    if data + 1 >= 10:
+        name = "molecule_No_" + str(data + 1) + ".txt"
+    else:
+        name = "molecule_No_0" + str(data + 1) + ".txt"
     dwell_times_df = []
     states_df = []
     FRET_state(0.2,0.8,100)
@@ -155,9 +158,9 @@ for data in mol:
     DAT = np.column_stack((noisy_donor,noisy_acceptor))
     dye_df = pd.DataFrame(DAT)
     dye_df_string = dye_df.to_string(index = False,header = False)
-    with open(os.path.join("C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/DAT/Test_1",name),'w') as file1:
+    with open(os.path.join("C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/test_order/dat/",name),'w') as file1:
         file1.write(dye_df_string)
     true_state_df = pd.DataFrame(state_values)
     true_state_df_string = true_state_df.to_string(index = False, header = False)
-    with open(os.path.join("C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/True_state/Test_1",name),'w') as file2:
+    with open(os.path.join("C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/test_order/state/",name),'w') as file2:
         file2.write(true_state_df_string)

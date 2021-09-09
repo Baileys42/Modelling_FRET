@@ -59,7 +59,7 @@ def FRET_state(state_1,state_2,T):
 
 
 
-FRET_state(0.2,0.8,100)
+FRET_state(0.6,0.8,100)
 
 ### function for interpolating function, needs to 'integrate' state_df values --> interpolate this data
 ### --> np.diff to differentiate back. 
@@ -189,15 +189,17 @@ def dye_trace(intensity,dye):
         for state in state_values:
             donor = (1-state) * intensity
             don_signal.append(donor)
-            current_d_noise = np.random.normal(0,(np.sqrt(donor)),1)
+            current_d_noise = np.random.normal(0,(np.sqrt(donor)*2),1)
             current_don_noise.append(current_d_noise)
     elif dye == "acceptor":
     ### acceptor trace + noise
         for state in state_values:
             acceptor = state * intensity
             acc_signal.append(acceptor)
-            current_a_noise = np.random.normal(0,(np.sqrt(acceptor)),1)
+            current_a_noise = np.random.normal(0,(np.sqrt(acceptor)*2),1)
             current_acc_noise.append(current_a_noise)
+
+
 
 
 
