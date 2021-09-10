@@ -9,7 +9,7 @@ import glob as glob
 
 
 ### where vbFRET output files are
-data_path = ["C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/test_order/vbFRET output/Test/"]
+data_path = ["C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/vbFRET_output/0.75_0.8_2High/"]
 ### folder to move .dat files to
 output = "C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRET/vbFRET_file_output/"
 
@@ -45,7 +45,7 @@ def file_read(input_folder):
 
 ### new location for .dat files from vbFRET
 compiled_df = []
-new_folder = "C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRET/vbFRET_file_output/Test/"
+new_folder = "C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRET/vbFRET_file_output/0.75_0.8_2High/"
 
 ### imports text files and converts to pd.DataFrame --> then into dictionary of dfs
 d = {}
@@ -74,7 +74,7 @@ for df in d:
 
 
 ### state value - where state value files are located
-state_input = 'C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/test_order/state/'
+state_input = 'C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/True_state/0.75_0.8_2High/'
 
 ### generates dictionary of pd.dfs that contain true fret state values
 state_d = {}
@@ -140,6 +140,6 @@ mean_df['A'] = mean_RMSD
 #print(mean_df)
 mean_df_str = mean_df.to_string()
 #print(mean_df_str)
-file_name = "0.2_0.8_Low_Noise" + '.txt'
+file_name = "0.75_0.8_2high" + '.txt'
 with open(os.path.join("C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRET/Mean_RMSD_output",file_name),'w') as file1:
     file1.write(mean_RMSD)
