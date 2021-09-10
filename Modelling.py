@@ -189,14 +189,14 @@ def dye_trace(intensity,dye):
         for state in state_values:
             donor = (1-state) * intensity
             don_signal.append(donor)
-            current_d_noise = np.random.normal(0,(np.sqrt(donor)*2),1)
+            current_d_noise = np.random.normal(0,(np.sqrt(donor)*4),1)
             current_don_noise.append(current_d_noise)
     elif dye == "acceptor":
     ### acceptor trace + noise
         for state in state_values:
             acceptor = state * intensity
             acc_signal.append(acceptor)
-            current_a_noise = np.random.normal(0,(np.sqrt(acceptor)*2),1)
+            current_a_noise = np.random.normal(0,(np.sqrt(acceptor)*4),1)
             current_acc_noise.append(current_a_noise)
 
 

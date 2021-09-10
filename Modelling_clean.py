@@ -119,14 +119,14 @@ def dye_trace(intensity,dye):
         for state in state_values:
             donor = (1-state) * intensity
             don_signal.append(donor)
-            current_d_noise = np.random.normal(0,(np.sqrt(donor)*2),1)
+            current_d_noise = np.random.normal(0,(np.sqrt(donor)*4),1)
             current_don_noise.append(current_d_noise)
     elif dye == "acceptor":
     ### acceptor trace + noise
         for state in state_values:
             acceptor = state * intensity
             acc_signal.append(acceptor)
-            current_a_noise = np.random.normal(0,(np.sqrt(acceptor)*2),1)
+            current_a_noise = np.random.normal(0,(np.sqrt(acceptor)*4),1)
             current_acc_noise.append(current_a_noise)
 
 
@@ -139,7 +139,7 @@ for data in mol:
         name = "molecule_No_0" + str(data + 1) + ".txt"
     dwell_times_df = []
     states_df = []
-    FRET_state(0.75,0.8,100)
+    FRET_state(0.7,0.8,100)
     state_values = interp_states(1000, noise = False)
     acc_signal = []
     don_signal = []
@@ -158,9 +158,9 @@ for data in mol:
     DAT = np.column_stack((noisy_donor,noisy_acceptor))
     dye_df = pd.DataFrame(DAT)
     dye_df_string = dye_df.to_string(index = False,header = False)
-    with open(os.path.join("C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/DAT/0.75_0.8_2High/",name),'w') as file1:
+    with open(os.path.join("C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/DAT/Noise_Increase/0.7_0.8_4x_Noise",name),'w') as file1:
         file1.write(dye_df_string)
     true_state_df = pd.DataFrame(state_values)
     true_state_df_string = true_state_df.to_string(index = False, header = False)
-    with open(os.path.join("C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/True_state/0.75_0.8_2High/",name),'w') as file2:
+    with open(os.path.join("C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/True_state/Noise_Increase/0.7_0.8_4x_Noise/",name),'w') as file2:
         file2.write(true_state_df_string)

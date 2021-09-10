@@ -7,7 +7,7 @@ import os
 import shutil
 import glob as glob
 
-folder = 'C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRET/Mean_RMSD_output/'
+folder = 'C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRET/Mean_RMSD_output/First_Molecules/'
 d = {}
 empty_df = []
 empty_df = pd.DataFrame(empty_df)
@@ -24,7 +24,7 @@ for dfs in d:
     new_df = pd.DataFrame(d[dfs])
     empty_df[dfs] = new_df
     
-
+print(empty_df)
 row_1 = pd.DataFrame([empty_df.iloc[0,2], empty_df.iloc[0,1],empty_df.iloc[0,0]])
 
 row_2 = pd.DataFrame([empty_df.iloc[0,5],empty_df.iloc[0,4],empty_df.iloc[0,3]])
@@ -34,18 +34,18 @@ row_3 = pd.DataFrame([empty_df.iloc[0,8], empty_df.iloc[0,7], empty_df.iloc[0,6]
 #print(row_1)
 
 
-df_values = {'Transition' : ['0.2-0.8', '0.4-0.8', '0.6-0.8', '0.7-0.8', '0.75-0.8'], 
-'Low\nNoise' : [(empty_df.iloc[0,2]), (empty_df.iloc[0,5]), (empty_df.iloc[0,8]), (empty_df.iloc[0,11]), (empty_df.iloc[0,14])],
-'Medium\nNoise' : [(empty_df.iloc[0,1]), (empty_df.iloc[0,4]), (empty_df.iloc[0,7]), (empty_df.iloc[0,10]), (empty_df.iloc[0,13])],
-'High\nNoise' : [(empty_df.iloc[0,0]), (empty_df.iloc[0,3]), (empty_df.iloc[0,6]), (empty_df.iloc[0,9]), (empty_df.iloc[0,12])]
+df_values = {'FRET efficiency transition' : ['∆ 0.6', '∆ 0.4', '∆ 0.2', '∆ 0.1', '∆ 0.05'], 
+'Low\nNoise' : [(empty_df.iloc[0,2]), (empty_df.iloc[0,5]), (empty_df.iloc[0,8]), (empty_df.iloc[0,14]), (empty_df.iloc[0,11])],
+'Medium\nNoise' : [(empty_df.iloc[0,1]), (empty_df.iloc[0,4]), (empty_df.iloc[0,7]), (empty_df.iloc[0,13]), (empty_df.iloc[0,10])],
+'High\nNoise' : [(empty_df.iloc[0,0]), (empty_df.iloc[0,3]), (empty_df.iloc[0,6]), (empty_df.iloc[0,12]), (empty_df.iloc[0,9])]
 }
 
 
 new_df = pd.DataFrame(df_values)
 
-new_df.set_index('Transition', inplace=True)
+new_df.set_index('FRET efficiency transition', inplace=True)
 
-new_df
+print(new_df)
 
 
 plot = sns.heatmap(new_df, vmin=0, vmax = 0.2, square =True, linewidths=True, cmap='inferno', annot = True)
