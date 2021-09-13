@@ -40,6 +40,7 @@ values = [empty_df.iloc[0,1],empty_df.iloc[0,0], empty_df.iloc[0,3], empty_df.il
 
 
 
+
 def show_figure():
     plt.bar(column_chart_x,values,color="darkorange")
     plt.xlabel('Noise level')

@@ -9,7 +9,7 @@ import glob as glob
 
 
 ### where vbFRET output files are
-data_path = ["C:\Users\clj713\Bailey_2\Simulated_FRET_Data\Trace_Output\vbFRET_output\Noise_Increase_2\0.7_0.8_1x/"]
+data_path = ["C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/vbFRET_output/Noise_Increase/0.7_0.8_2.5x_Noise/"]
 ### folder to move .dat files to
 output = "C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRET/vbFRET_file_output/"
 
@@ -94,6 +94,14 @@ for file in os.listdir(state_input):
     state_d[state_df_name] = state_data
 
 
+def find_states(input, state_num = 2):
+    state_1 = input[1]
+    counter = 1
+    for t in input: 
+        
+
+
+
 
 
 
@@ -108,7 +116,7 @@ state_df_values.reset_index(drop = True, inplace=True)
 state_df_values = state_df_values.sort_index(axis=1)
 #print(state_df_values)
 #print(state_df_values)
-#print(state_df_values)
+print(state_df_values)
 
 ### finds difference between predicted and observed values
 difference = idealised_FRET.sub(state_df_values, axis=0)
@@ -116,43 +124,6 @@ difference = idealised_FRET.sub(state_df_values, axis=0)
 #print(state_df_values)
 #print(difference)
 
-### function to count number of states fitted to data
-state_number = []
-def num_states(input):
-    tolist = input.to_list()
-    newset = set(tolist)
-    number = len(newset)
-    print(newset)
-    state_number.append(number)
-
-def num_states_2(input):
-    tolist = input.to_list()
-    nplist = np.array(tolist)
-    unique, freq = np.unique(nplist, return_counts = True)
-    #print(unique)
-    true_freq = []
-    for index, value in enumerate(freq):
-        if value > 10:
-            true_freq.append(unique[index])
-        else:
-            pass
-    length = len(true_freq)
-    state_number.append(length)
-
-
-    
-
-print('ideal')
-#print(idealised_FRET)
-
-for column in idealised_FRET.columns:
-    value = idealised_FRET[column]
-    #print(value)
-    num_states_2(value)
-
-state_number_df = pd.DataFrame(state_number)
-
-print(state_number)
 ### generates an RMSD value for each column
 RMSD_values = []
 
@@ -171,40 +142,12 @@ print('mean is: ' +str(mean_RMSD))
 #trace_1_RMSD = np.sqrt(trace_1_sum/999)
 #print(trace_1_RMSD)
 
-main_output_folder = 'C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRET/Output/Noise_Increase_2/0.7_0.8_1x/'
-
 
 mean_df = pd.DataFrame()
 mean_df['A'] = mean_RMSD
 #print(mean_df)
 mean_df_str = mean_df.to_string()
-RMSD_df = pd.DataFrame(RMSD_values)
-RMSD_str = RMSD_df.to_string()
-state_num_str = state_number_df.to_string()
-
-
 #print(mean_df_str)
-folder_name = "0.7_0.8_2.5x_Noise"
-file_name =  folder_name + '.txt'
-
-
-mean_folder = "mean_RMSD"
-if not os.path.exists(f"{main_output_folder}{mean_folder}/"):
-    os.makedirs(f"{main_output_folder}{mean_folder}/")
-mean_fol = str((f"{main_output_folder}{mean_folder}/"))
-with open(os.path.join(mean_fol,file_name),'w') as file1:
+file_name = "0.7_0.8_2.5x_Noise" + '.txt'
+with open(os.path.join("C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRET/Mean_RMSD_output",file_name),'w') as file1:
     file1.write(mean_RMSD)
-
-all_RMSD_folder = "All_RMSD"
-if not os.path.exists(f"{main_output_folder}{all_RMSD_folder}/"):
-    os.makedirs(f"{main_output_folder}{all_RMSD_folder}/")
-all_fol = str(f"{main_output_folder}{all_RMSD_folder}/")
-with open(os.path.join(all_fol,file_name), 'w') as file2:
-    file2.write(RMSD_str)
-
-state_count = "state_count"
-if not os.path.exists(f"{main_output_folder}{state_count}/"):
-    os.makedirs(f"{main_output_folder}{state_count}/")
-state_fol = str(f"{main_output_folder}{state_count}/")
-with open(os.path.join(state_fol,file_name), 'w') as file3:
-    file3.write(state_num_str)
