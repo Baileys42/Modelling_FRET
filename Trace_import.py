@@ -9,9 +9,9 @@ import glob as glob
 
 
 ### where vbFRET output files are
-data_path = ["C:\Users\clj713\Bailey_2\Simulated_FRET_Data\Trace_Output\vbFRET_output\Noise_Increase_2\0.7_0.8_1x/"]
+data_path = ["C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/vbFRET_output/Noise_Increase_2/0.7_0.8_1x/"]
 ### folder to move .dat files to
-output = "C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRET/vbFRET_file_output/"
+output = "C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRET/vbFRET_file_output/Noise_Increase_2/"
 
 ### finds text files in input folder and moves to output folder
 def get_trace_file(input_folder, output):
@@ -45,7 +45,7 @@ def file_read(input_folder):
 
 ### new location for .dat files from vbFRET
 compiled_df = []
-new_folder = "C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRET/vbFRET_file_output/0.7_0.8_2.5x_Noise/"
+new_folder = "C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRET/vbFRET_file_output/Noise_Increase_2/0.7_0.8_1x/"
 
 ### imports text files and converts to pd.DataFrame --> then into dictionary of dfs
 d = {}
@@ -74,7 +74,7 @@ for df in d:
 
 
 ### state value - where state value files are located
-state_input = 'C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/True_state/Noise_Increase/0.7_0.8_2.5x_Noise/'
+state_input = 'C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Trace_Output/True_state/Noise_Increase_2/0.7_0.8_1x/'
 
 ### generates dictionary of pd.dfs that contain true fret state values
 state_d = {}
@@ -85,11 +85,10 @@ state_df_values = pd.DataFrame(state_df_values)
 for file in os.listdir(state_input):
     #print('bug2')
     state_name = state_input + file
-    if file[-5] == '0':
-        state_df_name = "Trace_No_" + str(file[-6:-4])
+    if file[-7] == '1':
+        state_df_name = "Trace_No_100"
     else:
-        state_df_name = "Trace_No_0" + str(file[-5])
-    #print(state_df_name)
+        state_df_name = "Trace_No_" + str(file[-6:-4])
     state_data = pd.read_csv(state_name)
     state_d[state_df_name] = state_data
 
@@ -112,9 +111,13 @@ state_df_values = state_df_values.sort_index(axis=1)
 
 ### finds difference between predicted and observed values
 difference = idealised_FRET.sub(state_df_values, axis=0)
-#print(idealised_FRET)
+#print(idealised_FRET["Trace_No_48"])
+#print(state_df_values['Trace_No_48'])
+#print(difference["Trace_No_49"])
 #print(state_df_values)
 #print(difference)
+
+
 
 ### function to count number of states fitted to data
 state_number = []
@@ -140,7 +143,6 @@ def num_states_2(input):
     state_number.append(length)
 
 
-    
 
 print('ideal')
 #print(idealised_FRET)
@@ -156,11 +158,13 @@ print(state_number)
 ### generates an RMSD value for each column
 RMSD_values = []
 
+
 for column in difference.columns:
     column_sum = difference[column].sum()
     column_squared = column_sum ** 2
     column_RMSD = np.sqrt(column_squared/999)
     RMSD_values.append(column_RMSD)
+
 
 print(RMSD_values)
 mean_RMSD = np.average(RMSD_values)
@@ -177,14 +181,17 @@ main_output_folder = 'C:/Users/clj713/Bailey_2/Simulated_FRET_Data/Modelling_FRE
 mean_df = pd.DataFrame()
 mean_df['A'] = mean_RMSD
 #print(mean_df)
-mean_df_str = mean_df.to_string()
+mean_df_str = mean_df.to_string(index=False)
 RMSD_df = pd.DataFrame(RMSD_values)
-RMSD_str = RMSD_df.to_string()
-state_num_str = state_number_df.to_string()
+RMSD_str = RMSD_df.to_string(index=False)
+state_num_str = state_number_df.to_string(index=False)
+mean_count = np.average(state_number)
+mean_count_str = str(mean_count)
+print('av state is: ' + mean_count_str)
 
 
 #print(mean_df_str)
-folder_name = "0.7_0.8_2.5x_Noise"
+folder_name = "0.7_0.8_1x_Noise"
 file_name =  folder_name + '.txt'
 
 
@@ -208,3 +215,10 @@ if not os.path.exists(f"{main_output_folder}{state_count}/"):
 state_fol = str(f"{main_output_folder}{state_count}/")
 with open(os.path.join(state_fol,file_name), 'w') as file3:
     file3.write(state_num_str)
+
+mean_state_count = "mean_state_count"
+if not os.path.exists(f"{main_output_folder}{mean_state_count}/"):
+    os.makedirs(f"{main_output_folder}{mean_state_count}/")
+mean_state_fol = str(f"{main_output_folder}{mean_state_count}/")
+with open(os.path.join(mean_state_fol,file_name), 'w') as file4:
+    file4.write(state_num_str)
